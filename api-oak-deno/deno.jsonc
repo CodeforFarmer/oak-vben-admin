@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "dev":"deno --unstable run ./server.ts",
+    "gen": "pwd",
+    "upgrade": "deno run --allow-net --allow-read='deps.ts' --allow-write='deps.ts' https://deno.land/x/dmm/mod.ts update",
+    "migrate": "nessie migrate -c ./config/nessie.config.ts",
+    "seed": "nessie seed $1 -c ./config/nessie.config.ts",
+    "rollback": "nessie rollback -c ./config/nessie.config.ts",
+    "nessiestatus": "nessie status -c ./config/nessie.config.ts",
+    "makeseed":"nessie make:seed $1 -c ./config/nessie.config.ts",
+    "makemigration":"nessie make:migration $1 -c ./config/nessie.config.ts",
+  }
+}
