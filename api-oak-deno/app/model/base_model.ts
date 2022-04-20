@@ -1,26 +1,6 @@
-import { db } from "../../db/index.ts"
-
-import { PostgresClient } from "../../deps.ts";
+import { pool } from "../../db/index.ts"
 
 export default abstract class BaseModel {
-  private static async getDb(): Promise<PostgresClient> {
-    // const db = new PostgresClient({
-    //   user: "user",
-    //   password: "userpassword",
-    //   database: "realworld",
-    //   hostname: "realworld_postgres",
-    //   port: 5432,
-    //   tls: {
-    //     enforce: false,
-    //   },
-    // });
-    await db.connect();
-    return db;
-  }
-
-  private static async closeDb(db: PostgresClient): Promise<void> {
-    await db.end();
-  }
 
   //////////////////////////////////////////////////////////////////////////////
   // FILE MARKER - METHODS - STATIC ////////////////////////////////////////////
@@ -115,12 +95,11 @@ export default abstract class BaseModel {
   ): Promise<
     { rows: Record<string, unknown>[]; rowCount: number; error?: boolean }
   > {
+    const db = await pool.connect();
     try {
-      const db = await BaseModel.getDb();
       const dbResult = args && args.length
-        ? await db.queryObject(query, ...args)
+        ? await db.queryObject(query, args)
         : await db.queryObject(query);
-      await BaseModel.closeDb(db);
       return {
         rows: dbResult.rows as Record<string, unknown>[],
         rowCount: dbResult.rowCount ?? 0,
@@ -132,6 +111,8 @@ export default abstract class BaseModel {
         rowCount: 0,
         error: true,
       };
+    }finally {
+       db.release();
     }
   }
 }

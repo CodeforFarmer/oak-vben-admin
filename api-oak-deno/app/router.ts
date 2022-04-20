@@ -1,13 +1,12 @@
-import { Router,Context } from "../deps.ts";
+import { Router } from "../deps.ts";
 
-import * as authRoutes from "./auth.routes.ts";
-import * as userRoutes from "./user.routes.ts";
+import * as authRoutes from "./controller/auth_controller.ts";
+import * as userRoutes from "./controller/user_controller.ts";
 
-const router: Router = new Router();
+// deno-lint-ignore no-explicit-any
+const router: any = new Router();
 
-router.get("", (ctx: Context) => {
-  ctx.response.body = "hello world";
-});
+router.get("/", (ctx:any) => {ctx.response.body = "Hello World!";});
 
 router
   .post("/login", ...authRoutes.login)

@@ -1,16 +1,13 @@
-import {
-    ClientPostgreSQL,
-    NessieConfig,
-} from "../deps.ts";
-import { config as DBConfig } from "./config.test.ts";
+import { ClientPostgreSQL, NessieConfig } from "../deps.ts";
+import { config as SysConfig } from "./config.ts";
 
 /** Select one of the supported clients */
 const client = new ClientPostgreSQL({
-    database: DBConfig.database.database,
-    hostname: DBConfig.database.hostname,
-    port: DBConfig.database.port,
-    user: DBConfig.database.user,
-    password: DBConfig.database.password,
+  database: SysConfig.DB_NAME,
+  hostname: SysConfig.DB_HOST,
+  port: parseInt(SysConfig.DB_PORT),
+  user: SysConfig.DB_USER,
+  password: SysConfig.DB_PASS,
 });
 
 // const client = new ClientMySQL({
@@ -25,9 +22,9 @@ const client = new ClientPostgreSQL({
 
 /** This is the final config object */
 const config: NessieConfig = {
-    client,
-    migrationFolders: ["./db/migrations"],
-    seedFolders: ["./db/seeds"],
+  client,
+  migrationFolders: [SysConfig.NESSIE_MIGRATION_FOLDERS],
+  seedFolders: [SysConfig.NESSIE_SEED_FOLDERS],
 };
 
 export default config;

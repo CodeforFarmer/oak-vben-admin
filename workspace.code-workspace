@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "api-oak-deno"
+		},
+		{
+			"path": "vue-vben-admin"
+		},
+		{
+			"path": "..\\..\\money\\jeecgboot-vue3"
+		},
+		{
+			"path": "C:\\Users\\sunwei\\Downloads\\deno_rest-master"
+		}
+	],
+	"settings": {
+		"deno.enable": true,
+		"deno.lint": true,
+		"deno.unstable": true
+	}
+}

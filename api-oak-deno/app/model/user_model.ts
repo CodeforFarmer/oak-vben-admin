@@ -1,12 +1,14 @@
-import BaseModel from "../core/base_model.ts";
+import BaseModel from "./base_model.ts";
 
 export type UserEntity = {
   bio?: string;
   email: string;
   id?: number;
-  image?: string;
+  avatar?: string;
   password?: string;
   username: string;
+  realname: string;
+  wallet: string;
   token?: null | string;
 };
 
@@ -19,7 +21,9 @@ export type UserEntity = {
  * @param string user.password
  * @param string user.email
  * @param string user.bio
- * @param string user.image
+ * @param string user.avatar
+ * @param string user.wallet
+ * @param string user.realname
  * @param number user.id
  *
  * @return UserModel
@@ -29,7 +33,9 @@ export function createUserModelObject(user: {
   password: string;
   email: string;
   bio: string;
-  image: string;
+  avatar: string;
+  wallet: string;
+  realname: string;
   id: number;
 }): UserModel {
   return new UserModel(
@@ -37,7 +43,9 @@ export function createUserModelObject(user: {
     user.password,
     user.email,
     user.bio,
-    user.image,
+    user.avatar,
+    user.wallet,
+    user.realname,
     user.id,
   );
 }
@@ -75,7 +83,17 @@ export class UserModel extends BaseModel {
    *
    * Path to where the profile picture resides for the user
    */
-  public image: string;
+  public avatar: string;
+
+  /**
+   * @var string
+   */
+  public realname: string;
+
+  /**
+   * @var string
+   */
+  public wallet: string;
 
   /**
    * @var string
@@ -100,7 +118,9 @@ export class UserModel extends BaseModel {
    * @param string password
    * @param string email
    * @param string bio=""
-   * @param string image="https://static.productionready.io/images/smiley-cyrus.jpg"
+   * @param string avatar="https://static.productionready.io/avatars/smiley-cyrus.jpg"
+   * @param string wallet
+   * @param string realname
    * @param number id=-1
    */
   constructor(
@@ -108,7 +128,10 @@ export class UserModel extends BaseModel {
     password: string,
     email: string,
     bio: string = "",
-    image: string = "https://static.productionready.io/images/smiley-cyrus.jpg",
+    avatar: string =
+      "https://static.productionready.io/avatars/smiley-cyrus.jpg",
+    wallet: string = "0x0000000000000000000000000000000000000000",
+    realname: string = "namee",
     id: number = -1,
   ) {
     super();
@@ -117,7 +140,9 @@ export class UserModel extends BaseModel {
     this.password = password;
     this.email = email;
     this.bio = bio;
-    this.image = image;
+    this.avatar = avatar;
+    this.wallet = wallet;
+    this.realname = realname;
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -130,7 +155,7 @@ export class UserModel extends BaseModel {
    * @return Promise<boolean> False if the query failed to delete
    */
   public async delete(): Promise<boolean> {
-    const query = `DELETE FROM users WHERE id = $1`;
+    const query = `DELETE FROM sys_user WHERE id = $1`;
     const dbResult = await BaseModel.query(query, this.id);
     if (dbResult.rowCount! < 1) {
       return false;
@@ -150,14 +175,16 @@ export class UserModel extends BaseModel {
     }
 
     const query =
-      "INSERT INTO users (username, email, password, bio, image) VALUES ($1, $2, $3, $4, $5);";
+      "INSERT INTO sys_user (username, email, password, bio, avatar, wallet, realname) VALUES ($1, $2, $3, $4, $5, $6, $7);";
     const dbResult = await BaseModel.query(
       query,
       this.username,
       this.email,
       this.password,
       this.bio,
-      this.image,
+      this.avatar,
+      this.wallet,
+      this.realname,
     );
     if (dbResult.rowCount < 1) {
       return null;
@@ -177,16 +204,18 @@ export class UserModel extends BaseModel {
    * @return Promise<UserModel|null> False if no results were found
    */
   public async update(): Promise<UserModel | null> {
-    const query = "UPDATE users SET " +
-      "username = $1, password = $2, email = $3, bio = $4, image = $5 " +
-      `WHERE id = $6;`;
+    const query = "UPDATE sys_user SET " +
+      "username = $1, password = $2, email = $3, bio = $4, avatar = $5, wallet = $6, realname = $7 " +
+      `WHERE id = $8;`;
     const dbResult = await BaseModel.query(
       query,
       this.username,
       this.password,
       this.email,
       this.bio,
-      this.image,
+      this.avatar,
+      this.wallet,
+      this.realname,
       this.id,
     );
     if (dbResult.rowCount! < 1) {
@@ -215,7 +244,7 @@ export class UserModel extends BaseModel {
   static async where(
     fields: { [key: string]: string | number },
   ): Promise<UserModel[] | []> {
-    const results = await BaseModel.Where("users", fields);
+    const results = await BaseModel.Where("sys_user", fields);
 
     if (results.length <= 0) {
       return [];
@@ -230,7 +259,9 @@ export class UserModel extends BaseModel {
           password: string;
           email: string;
           bio: string;
-          image: string;
+          avatar: string;
+          wallet: string;
+          realname: string;
           id: number;
         },
       );
@@ -250,7 +281,7 @@ export class UserModel extends BaseModel {
     column: string,
     values: string[] | number[],
   ): Promise<UserModel[] | []> {
-    const results = await BaseModel.WhereIn("users", {
+    const results = await BaseModel.WhereIn("sys_user", {
       column,
       values,
     });
@@ -268,7 +299,9 @@ export class UserModel extends BaseModel {
           password: string;
           email: string;
           bio: string;
-          image: string;
+          avatar: string;
+          wallet: string;
+          realname: string;
           id: number;
         },
       );
@@ -288,7 +321,9 @@ export class UserModel extends BaseModel {
       username: this.username,
       email: this.email,
       bio: this.bio,
-      image: this.image,
+      avatar: this.avatar,
+      wallet: this.wallet,
+      realname: this.realname,
       token: null,
     };
   }
