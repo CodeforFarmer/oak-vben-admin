@@ -19,7 +19,7 @@ export const registerUser = async (userData: CreateUser) => {
     userData.password = await encription.encript(password);
     /** add default user role */
     const userInfo: UserInfo = { roles: [UserRole.USER], ...userData };
-    
+
     const user = new UserModel(
       userInfo.username,
       userInfo.password,

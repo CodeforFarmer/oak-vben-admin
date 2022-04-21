@@ -7,7 +7,7 @@ import {
   RouterContext,
   RouterMiddleware,
   Status,
-  verify
+  verify,
 } from "../../deps.ts";
 
 export type Pattern = { path: string | RegExp; methods?: HTTPMethods[] };

@@ -1,8 +1,4 @@
-import {
-  AbstractSeed,
-  ClientPostgreSQL,
-  Info,
-} from "../../deps.ts";
+import { AbstractSeed, ClientPostgreSQL, Info } from "../../deps.ts";
 
 export default class extends AbstractSeed<ClientPostgreSQL> {
   /** Runs on seed */

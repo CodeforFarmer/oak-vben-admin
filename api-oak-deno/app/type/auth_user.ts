@@ -1,4 +1,3 @@
-
 /**
  * Authenticated user info
  * user as JWT access token payload

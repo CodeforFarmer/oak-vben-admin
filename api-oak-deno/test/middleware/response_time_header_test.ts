@@ -1,7 +1,6 @@
 // Copyright 2020 the oak authors. All rights reserved. MIT license.
 
-import { Context,assert,
-    assertEquals, } from "../../deps.ts";
+import { assert, assertEquals, Context } from "../../deps.ts";
 import { responseTimeHeader } from "../../app/middleware/response_time_header.ts";
 
 Deno.test({

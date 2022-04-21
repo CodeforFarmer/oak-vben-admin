@@ -1,7 +1,6 @@
-import { pool } from "../../db/index.ts"
+import { pool } from "../../db/index.ts";
 
 export default abstract class BaseModel {
-
   //////////////////////////////////////////////////////////////////////////////
   // FILE MARKER - METHODS - STATIC ////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
@@ -111,8 +110,8 @@ export default abstract class BaseModel {
         rowCount: 0,
         error: true,
       };
-    }finally {
-       db.release();
+    } finally {
+      db.release();
     }
   }
 }

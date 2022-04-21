@@ -8,7 +8,10 @@ import {
   Payload,
   RouterContext,
 } from "../../deps.ts";
-import { jwtMiddleware, JwtMiddlewareOptions } from "../../app/middleware/jwt.middleware.ts";
+import {
+  jwtMiddleware,
+  JwtMiddlewareOptions,
+} from "../../app/middleware/jwt.middleware.ts";
 
 const SECRET = await crypto.subtle.generateKey(
   { name: "HMAC", hash: "SHA-512" },

@@ -39,9 +39,9 @@ export const updateUser = async (id: number, userData: any) => {
       id,
     );
     const result = await user.update();
-    if(result){
+    if (result) {
       return user;
-    }else{
+    } else {
       throw new httpErrors.NotFound("User not found");
     }
   } catch (err) {
@@ -60,7 +60,8 @@ export const updateUser = async (id: number, userData: any) => {
  */
 export const deleteUser = async (id: number) => {
   // todo: catch db error
-   const result = await new UserModel("", "", "", "", "", "", "", Number(id)).delete();
+  const result = await new UserModel("", "", "", "", "", "", "", Number(id))
+    .delete();
   if (!result) {
     throw new httpErrors.NotFound("User not found");
   }

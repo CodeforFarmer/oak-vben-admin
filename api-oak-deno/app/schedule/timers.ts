@@ -4,4 +4,4 @@ clearTimeout(timerId);
 const intervalId = setInterval(() => console.log("Nope"), 1000);
 clearInterval(intervalId);
 
-// cron 
+// cron

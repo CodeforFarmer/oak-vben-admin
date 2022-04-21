@@ -1,4 +1,4 @@
-import {  httpErrors,Context } from "../../deps.ts";
+import { Context, httpErrors } from "../../deps.ts";
 import { hasUserRole } from "../extend/roles.ts";
 import { UserRole } from "../type/user_role.ts";
 
@@ -7,9 +7,9 @@ import { UserRole } from "../type/user_role.ts";
  * checks authorization for context user, user roles
  */
 const userGuard = (roles?: UserRole | UserRole[]) => {
-  return async (ctx:Context, next: () => Promise<void>) => {
+  return async (ctx: Context, next: () => Promise<void>) => {
     // if auth user not found, throw error
-    const  user  = ctx.state.cur_user;
+    const user = ctx.state.cur_user;
     if (!user) {
       throw new httpErrors.Unauthorized("Unauthorized user");
     }

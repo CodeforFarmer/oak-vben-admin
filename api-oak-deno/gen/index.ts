@@ -1,10 +1,10 @@
 const { cwd, stdout } = Deno;
 
-import { renderFile,copy } from "../deps.ts";
+import { copy, renderFile } from "../deps.ts";
 
 (async () => {
   const output = await renderFile(`${cwd()}\\index.ejs`, {
-    name: "world"
+    name: "world",
   });
   await copy(output, stdout);
 })();

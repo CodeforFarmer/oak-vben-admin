@@ -1,8 +1,6 @@
 import { Algorithm, create, Header, Payload, verify } from "../../deps.ts";
 import { config } from "../../config/config.ts";
-import {
-  JwtMiddlewareOptions,
-} from "../middleware/jwt.middleware.ts";
+import { JwtMiddlewareOptions } from "../middleware/jwt.middleware.ts";
 
 const SECRET = await crypto.subtle.generateKey(
   { name: "HMAC", hash: "SHA-512" },

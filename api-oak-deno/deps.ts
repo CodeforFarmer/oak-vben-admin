@@ -9,7 +9,6 @@ export { v4 } from "https://deno.land/std/uuid/mod.ts";
 export * as log from "https://deno.land/std/log/mod.ts";
 export { config } from "https://deno.land/std/dotenv/mod.ts";
 
-
 // oak
 export {
   Application,
@@ -44,7 +43,7 @@ export { superoak } from "https://deno.land/x/superoak/mod.ts";
 export {
   AbstractMigration,
   AbstractSeed,
-  ClientPostgreSQL
+  ClientPostgreSQL,
 } from "https://deno.land/x/nessie/mod.ts";
 export type { Info, NessieConfig } from "https://deno.land/x/nessie/mod.ts";
 // dejs - generate code
@@ -62,8 +61,8 @@ export type { Algorithm } from "https://deno.land/x/djwt@v2.4/algorithm.ts";
 // validasaur
 export {
   isEmail,
-  required,
   lengthBetween,
+  required,
   validate,
 } from "https://deno.land/x/validasaur/mod.ts";
 export type {

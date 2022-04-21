@@ -1,11 +1,10 @@
-import { Middleware,v4 as uuid } from "../../deps.ts";
-
+import { Middleware, v4 as uuid } from "../../deps.ts";
 
 /**
  * requestId middleware
- * attach requestId in request & response header 
+ * attach requestId in request & response header
  */
-const requestIdMiddleware: Middleware= async function (ctx, next) {
+const requestIdMiddleware: Middleware = async function (ctx, next) {
   let requestId = ctx.request.headers.get("X-Response-Id");
   if (!requestId) {
     /** if request id not being set, set unique request id */
