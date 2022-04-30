@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno --unstable run -A ./main.ts",
+    "dev": "deno --unstable run -A --watch ./main.ts",
     "gen": "pwd",
     "upgrade": "deno run --allow-net --allow-read='deps.ts' --allow-write='deps.ts' https://deno.land/x/dmm/mod.ts update",
     "migrate": "nessie migrate -c ./config/nessie.config.ts",

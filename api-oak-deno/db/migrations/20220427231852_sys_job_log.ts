@@ -1,0 +1,55 @@
+import { AbstractMigration, ClientPostgreSQL } from "../../deps.ts";
+
+export default class extends AbstractMigration<ClientPostgreSQL> {
+  /** Runs on migrate */
+  async up(): Promise<void> {
+    await this.client.queryObject(`
+    DROP TABLE IF EXISTS SYS_JOB_LOG;
+    CREATE TABLE SYS_JOB_LOG(
+        ID BIGINT NOT NULL,
+        JOB_ID BIGINT NOT NULL,
+        JOB_NAME VARCHAR(50) NOT NULL,
+        JOB_GROUP VARCHAR(50) NOT NULL,
+        INVOKE_TARGET VARCHAR(500) NOT NULL,
+        CRON_EXPRESSION VARCHAR(50) NOT NULL,
+        JOB_MESSAGE VARCHAR(250),
+        EXCEPTION_MSG VARCHAR(250),
+        TENANT_ID BIGINT NOT NULL DEFAULT  '1',
+        DESCRIPTION VARCHAR(500),
+        BOOL_EXECUTE_SUCCESS_ENUM SMALLINT NOT NULL DEFAULT  '1',
+        JOB_START_DATE BIGINT,
+        JOB_END_DATE BIGINT,
+        EXECUTE_TIME BIGINT,
+        CREATE_DATE BIGINT NOT NULL,
+        CREATE_USER_ID BIGINT NOT NULL,
+        PRIMARY KEY (ID)
+    );
+    
+    COMMENT ON TABLE SYS_JOB_LOG IS '';
+    COMMENT ON COLUMN SYS_JOB_LOG.ID IS '主键ID';
+    COMMENT ON COLUMN SYS_JOB_LOG.JOB_ID IS '任务ID:oneToManyKey:foreignKey';
+    COMMENT ON COLUMN SYS_JOB_LOG.JOB_NAME IS '任务名称:oneParam;listParam';
+    COMMENT ON COLUMN SYS_JOB_LOG.JOB_GROUP IS '任务组名';
+    COMMENT ON COLUMN SYS_JOB_LOG.INVOKE_TARGET IS '调用目标字符串';
+    COMMENT ON COLUMN SYS_JOB_LOG.CRON_EXPRESSION IS 'cron;执行表达式';
+    COMMENT ON COLUMN SYS_JOB_LOG.JOB_MESSAGE IS '日志信息';
+    COMMENT ON COLUMN SYS_JOB_LOG.EXCEPTION_MSG IS '异常信息';
+    COMMENT ON COLUMN SYS_JOB_LOG.TENANT_ID IS '所属租户';
+    COMMENT ON COLUMN SYS_JOB_LOG.DESCRIPTION IS '备注';
+    COMMENT ON COLUMN SYS_JOB_LOG.BOOL_EXECUTE_SUCCESS_ENUM IS '是否执行成功:[1=是=YES,;2=否=NO]max=2';
+    COMMENT ON COLUMN SYS_JOB_LOG.JOB_START_DATE IS '任务开始时间';
+    COMMENT ON COLUMN SYS_JOB_LOG.JOB_END_DATE IS '任务结束时间';
+    COMMENT ON COLUMN SYS_JOB_LOG.EXECUTE_TIME IS '执行时间:单位毫秒';
+    COMMENT ON COLUMN SYS_JOB_LOG.CREATE_DATE IS '创建时间';
+    COMMENT ON COLUMN SYS_JOB_LOG.CREATE_USER_ID IS '创建人';
+    
+    `);
+  }
+
+  /** Runs on rollback */
+  async down(): Promise<void> {
+    await this.client.queryObject(`
+            DROP table SYS_JOB_LOG
+        `);
+  }
+}

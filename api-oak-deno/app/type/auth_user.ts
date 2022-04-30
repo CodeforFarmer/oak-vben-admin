@@ -11,4 +11,6 @@ export type AuthUser = {
   name: string;
   /** user roles */
   roles: string;
+  /** user can */
+  ability: any;
 };

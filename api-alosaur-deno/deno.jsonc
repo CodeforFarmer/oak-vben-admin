@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "dev": "deno --unstable run -A  --config ./tsconfig.json  --watch ./app.ts",
+    "run_imp": "deno --unstable run -A --importmap=imports.json --config ./tsconfig.json  --watch ./app.ts",
+    "api": "deno --unstable run -A --config ./tsconfig.json  --watch ./config/openapi_snapshot.ts",
+  }
+}

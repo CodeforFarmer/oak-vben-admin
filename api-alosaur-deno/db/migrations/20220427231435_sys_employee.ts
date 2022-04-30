@@ -1,0 +1,47 @@
+import { AbstractMigration, ClientPostgreSQL } from "../../deps.ts";
+
+export default class extends AbstractMigration<ClientPostgreSQL> {
+  /** Runs on migrate */
+  async up(): Promise<void> {
+    await this.client.queryObject(`
+    DROP TABLE IF EXISTS SYS_EMPLOYEE;
+    CREATE TABLE SYS_EMPLOYEE(
+        ID BIGINT NOT NULL,
+        USER_ID BIGINT NOT NULL,
+        WORK_CARD_ID VARCHAR(50),
+        JOB_POSITION VARCHAR(50),
+        DELETE_ENUM SMALLINT NOT NULL DEFAULT  '1',
+        TENANT_ID BIGINT NOT NULL DEFAULT  '1',
+        CREATE_DATE BIGINT NOT NULL,
+        CREATE_USER_ID BIGINT NOT NULL,
+        UPDATE_DATE BIGINT NOT NULL,
+        UPDATE_USER_ID BIGINT NOT NULL,
+        DELETE_DATE BIGINT,
+        DELETE_USER_ID BIGINT,
+        PRIMARY KEY (ID)
+    );
+    
+    COMMENT ON TABLE SYS_EMPLOYEE IS '';
+    COMMENT ON COLUMN SYS_EMPLOYEE.ID IS '主键ID';
+    COMMENT ON COLUMN SYS_EMPLOYEE.USER_ID IS '用户ID:foreignKey';
+    COMMENT ON COLUMN SYS_EMPLOYEE.WORK_CARD_ID IS '工号';
+    COMMENT ON COLUMN SYS_EMPLOYEE.JOB_POSITION IS '职位';
+    COMMENT ON COLUMN SYS_EMPLOYEE.DELETE_ENUM IS '删除状态:[1=未删除=NOT_DELETED,;2=已删除=DELETED]max=2';
+    COMMENT ON COLUMN SYS_EMPLOYEE.TENANT_ID IS '所属租户';
+    COMMENT ON COLUMN SYS_EMPLOYEE.CREATE_DATE IS '创建时间';
+    COMMENT ON COLUMN SYS_EMPLOYEE.CREATE_USER_ID IS '创建人';
+    COMMENT ON COLUMN SYS_EMPLOYEE.UPDATE_DATE IS '更新时间';
+    COMMENT ON COLUMN SYS_EMPLOYEE.UPDATE_USER_ID IS '更新人';
+    COMMENT ON COLUMN SYS_EMPLOYEE.DELETE_DATE IS '删除时间';
+    COMMENT ON COLUMN SYS_EMPLOYEE.DELETE_USER_ID IS '删除人';
+    
+    `);
+  }
+
+  /** Runs on rollback */
+  async down(): Promise<void> {
+    await this.client.queryObject(`
+            DROP table SYS_EMPLOYEE
+        `);
+  }
+}

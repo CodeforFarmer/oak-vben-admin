@@ -6,6 +6,9 @@
 
 # Create a Postgres Container
 
+I'm strongly recommend you use portainer to manager your containers.
+There are some app container templates on portainer service. 
+
 ```shell script
 docker run \
 	-d \
@@ -17,21 +20,27 @@ docker run \
 	postgres:lastest
 ```
 
+# Architecture 
+Deno 1.x
+Postgresjs 3.x  insteadof denodb
+Alosaur         reason see also: https://github.com/denosaurs/bench
+
 # Generate Code From Template
 
 ```
-deno --unstable run --allow-read  index.ts
+PDMAN Client
 ```
 
 # Nessie,Denon Install
 
-deno install --unstable --allow-net --allow-env --allow-read=.
---allow-write=nessie.config.ts,db -f https://deno.land/x/nessie/cli.ts deno
-install -qAf --unstable https://deno.land/x/denon/denon.ts
+deno install --unstable --allow-net --allow-env --allow-read=. --allow-write=nessie.config.ts,db -f https://deno.land/x/nessie/cli.ts 
+deno install -qAf --unstable https://deno.land/x/denon/denon.ts
 
 # Style Guide
 
 easy CRUD: Active Record complicated CRUD: traditional sql
+
+https://yoshixmk.github.io/deno-x-ranking/
 
 https://deno.land/manual@v1.20.6/contributing/style_guide
 

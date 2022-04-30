@@ -49,4 +49,28 @@ const getJwtPayload = async (token: string): Promise<any | null> => {
   return null;
 };
 
-export { getAuthToken, getJwtPayload, getRefreshToken, jwtOptions };
+const getHash = async (src: string) => {
+  const strBytes = new TextEncoder().encode(src);
+  const rawHash = await crypto.subtle.digest("SHA-1", strBytes);
+  const bufArr = new Uint8Array(rawHash);
+  const hexString = Array.from(bufArr).map((b) =>
+    b.toString(16).padStart(2, "0")
+  ).join("");
+  return hexString;
+};
+
+
+//Cleanup expired JWTs
+setInterval(async () => {
+  for (let i = 0; i < localStorage.length; i++) {
+    const token = localStorage.key(i);
+    if (!token) continue;
+    try {
+      await verify(token, SECRET);
+    } catch (e) {
+      localStorage.removeItem(token);
+    }
+  }
+}, 100000);
+
+export { getAuthToken, getHash, getJwtPayload, getRefreshToken, jwtOptions };

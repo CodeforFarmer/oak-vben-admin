@@ -1,0 +1,51 @@
+import { AbstractMigration, ClientPostgreSQL } from "../../deps.ts";
+
+export default class extends AbstractMigration<ClientPostgreSQL> {
+  /** Runs on migrate */
+  async up(): Promise<void> {
+    await this.client.queryObject(`
+    DROP TABLE IF EXISTS SYS_PARAM_TYPE;
+    CREATE TABLE SYS_PARAM_TYPE(
+        ID BIGINT NOT NULL,
+        TYPE_NAME VARCHAR(50) NOT NULL,
+        TYPE_CODE VARCHAR(100) NOT NULL,
+        RANKING SMALLINT NOT NULL DEFAULT  '100',
+        DESCRIPTION VARCHAR(500),
+        STATE_ENUM SMALLINT NOT NULL DEFAULT  '1',
+        DELETE_ENUM SMALLINT NOT NULL DEFAULT  '1',
+        TENANT_ID BIGINT NOT NULL DEFAULT  '1',
+        CREATE_DATE BIGINT NOT NULL,
+        CREATE_USER_ID BIGINT NOT NULL,
+        UPDATE_DATE BIGINT NOT NULL,
+        UPDATE_USER_ID BIGINT NOT NULL,
+        DELETE_DATE BIGINT,
+        DELETE_USER_ID BIGINT,
+        PRIMARY KEY (ID)
+    );
+    
+    COMMENT ON TABLE SYS_PARAM_TYPE IS '';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.ID IS '主键ID';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.TYPE_NAME IS '类型名称';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.TYPE_CODE IS '类型编码:oneParam;listParam';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.RANKING IS '排序:排序值越小越排前;max=100';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.DESCRIPTION IS '备注';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.STATE_ENUM IS '启用状态:[1=启用=ENABLE,;2=禁用=DISABLE]max=2';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.DELETE_ENUM IS '删除状态:[1=未删除=NOT_DELETED,;2=已删除=DELETED]max=2';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.TENANT_ID IS '所属租户';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.CREATE_DATE IS '创建时间';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.CREATE_USER_ID IS '创建人';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.UPDATE_DATE IS '更新时间';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.UPDATE_USER_ID IS '更新人';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.DELETE_DATE IS '删除时间';
+    COMMENT ON COLUMN SYS_PARAM_TYPE.DELETE_USER_ID IS '删除人';
+    
+    `);
+  }
+
+  /** Runs on rollback */
+  async down(): Promise<void> {
+    await this.client.queryObject(`
+            DROP table SYS_PARAM_TYPE
+        `);
+  }
+}

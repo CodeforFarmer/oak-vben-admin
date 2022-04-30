@@ -1,0 +1,53 @@
+import { AbstractMigration, ClientPostgreSQL } from "../../deps.ts";
+
+export default class extends AbstractMigration<ClientPostgreSQL> {
+  /** Runs on migrate */
+  async up(): Promise<void> {
+    await this.client.queryObject(`
+    DROP TABLE IF EXISTS SYS_JOB;
+    CREATE TABLE SYS_JOB(
+        ID BIGINT NOT NULL,
+        JOB_NAME VARCHAR(50) NOT NULL,
+        JOB_GROUP VARCHAR(50) NOT NULL DEFAULT  'DEFAULT',
+        INVOKE_TARGET VARCHAR(500) NOT NULL,
+        CRON_EXPRESSION VARCHAR(50) NOT NULL,
+        MISFIRE_POLICY_ENUM SMALLINT NOT NULL DEFAULT  '4',
+        BOOL_SUPPORT_CONCURRENT_ENUM SMALLINT NOT NULL DEFAULT  '2',
+        RANKING SMALLINT NOT NULL DEFAULT  '100',
+        DESCRIPTION VARCHAR(500),
+        STATE_ENUM SMALLINT NOT NULL DEFAULT  '1',
+        TENANT_ID BIGINT NOT NULL DEFAULT  '1',
+        CREATE_DATE BIGINT NOT NULL,
+        CREATE_USER_ID BIGINT NOT NULL,
+        UPDATE_DATE BIGINT NOT NULL,
+        UPDATE_USER_ID BIGINT NOT NULL,
+        PRIMARY KEY (ID)
+    );
+    
+    COMMENT ON TABLE SYS_JOB IS '';
+    COMMENT ON COLUMN SYS_JOB.ID IS '主键ID';
+    COMMENT ON COLUMN SYS_JOB.JOB_NAME IS '任务名称:oneParam;listParam';
+    COMMENT ON COLUMN SYS_JOB.JOB_GROUP IS '任务组名';
+    COMMENT ON COLUMN SYS_JOB.INVOKE_TARGET IS '调用目标字符串';
+    COMMENT ON COLUMN SYS_JOB.CRON_EXPRESSION IS 'cron;执行表达式';
+    COMMENT ON COLUMN SYS_JOB.MISFIRE_POLICY_ENUM IS '计划执行错误策略:[1=默认=DEFAULT,;2=立即执行=NOW_RUN, 3=执行一次=ONLY_RUN, 4=放弃执行=SUSPEND_RUN]max=4';
+    COMMENT ON COLUMN SYS_JOB.BOOL_SUPPORT_CONCURRENT_ENUM IS '是否并发执行:[1=是=YES,;2=否=NO]max=2';
+    COMMENT ON COLUMN SYS_JOB.RANKING IS '排序:排序值越小越排前;max=100';
+    COMMENT ON COLUMN SYS_JOB.DESCRIPTION IS '备注';
+    COMMENT ON COLUMN SYS_JOB.STATE_ENUM IS '启用状态:[1=启用=ENABLE,;2=禁用=DISABLE]max=2';
+    COMMENT ON COLUMN SYS_JOB.TENANT_ID IS '所属租户';
+    COMMENT ON COLUMN SYS_JOB.CREATE_DATE IS '创建时间';
+    COMMENT ON COLUMN SYS_JOB.CREATE_USER_ID IS '创建人';
+    COMMENT ON COLUMN SYS_JOB.UPDATE_DATE IS '更新时间';
+    COMMENT ON COLUMN SYS_JOB.UPDATE_USER_ID IS '更新人';
+    
+    `);
+  }
+
+  /** Runs on rollback */
+  async down(): Promise<void> {
+    await this.client.queryObject(`
+            DROP table SYS_JOB
+        `);
+  }
+}

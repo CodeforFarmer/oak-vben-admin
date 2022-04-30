@@ -5,6 +5,7 @@ import { UserRole } from "../type/user_role.ts";
 /**
  * has user role middleware
  * checks authorization for context user, user roles
+ * RBAC + ABAC , RBAC动态菜单，ABAC具体数据权限
  */
 const userGuard = (roles?: UserRole | UserRole[]) => {
   return async (ctx: Context, next: () => Promise<void>) => {

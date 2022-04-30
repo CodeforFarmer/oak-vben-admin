@@ -1,6 +1,7 @@
 import { Application, Middleware, oakCors } from "./deps.ts";
 import * as middlewares from "./app/middleware/index.ts";
 import { config } from "./config/config.ts";
+import { rateLimit } from "./config/rate_limit.ts";
 import { Context } from "./app/type/context.ts";
 import { router } from "./app/router.ts";
 import { jwtOptions } from "./app/extend/jwt.ts";
@@ -10,9 +11,11 @@ import {
   OnSuccessHandler,
 } from "./app/middleware/jwt.middleware.ts";
 
+// fixme - add permission manifest
 const app = new Application<Context>();
 
 app.use(oakCors());
+app.use(rateLimit);
 // app.use(session.initMiddleware())
 
 app.use(middlewares.loggerMiddleware);

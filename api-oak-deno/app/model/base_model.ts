@@ -1,4 +1,4 @@
-import { pool } from "../../db/index.ts";
+import sql  from "../../db/index.ts";
 
 export default abstract class BaseModel {
   //////////////////////////////////////////////////////////////////////////////
@@ -94,24 +94,20 @@ export default abstract class BaseModel {
   ): Promise<
     { rows: Record<string, unknown>[]; rowCount: number; error?: boolean }
   > {
-    const db = await pool.connect();
     try {
       const dbResult = args && args.length
-        ? await db.queryObject(query, args)
-        : await db.queryObject(query);
+        ? await sql.unsafe(query, args,{ prepare: true })
+        : await sql.unsafe(query);
       return {
-        rows: dbResult.rows as Record<string, unknown>[],
-        rowCount: dbResult.rowCount ?? 0,
+        rows: dbResult,
+        rowCount: dbResult.length,
       };
     } catch (err) {
-      console.error(err);
       return {
         rows: [],
         rowCount: 0,
         error: true,
       };
-    } finally {
-      db.release();
-    }
+    } 
   }
 }

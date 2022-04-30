@@ -14,6 +14,21 @@
 		},
 		{
 			"path": "component-vue-ovd"
+		},
+		{
+			"path": "ovd-website"
+		},
+		{
+			"path": "..\\..\\codeforfarmer\\deno-cancan"
+		},
+		{
+			"path": "..\\..\\codeforfarmer\\egg-cancan"
+		},
+		{
+			"path": "api-alosaur-deno"
+		},
+		{
+			"path": "..\\..\\..\\code\\alosaur"
 		}
 	],
 	"settings": {

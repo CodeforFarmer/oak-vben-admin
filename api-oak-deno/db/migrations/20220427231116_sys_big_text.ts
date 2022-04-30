@@ -1,0 +1,50 @@
+import { AbstractMigration, ClientPostgreSQL } from "../../deps.ts";
+
+export default class extends AbstractMigration<ClientPostgreSQL> {
+  /** Runs on migrate */
+  async up(): Promise<void> {
+    await this.client.queryObject(`
+    DROP TABLE IF EXISTS SYS_BIG_TEXT;
+    CREATE TABLE SYS_BIG_TEXT(
+        ID BIGINT NOT NULL,
+        TEXT_TITLE VARCHAR(250) NOT NULL,
+        TEXT_CODE VARCHAR(50) NOT NULL,
+        TEXT_CONTENT VARCHAR NOT NULL,
+        STATE_ENUM SMALLINT NOT NULL DEFAULT  '1',
+        DELETE_ENUM SMALLINT NOT NULL DEFAULT  '1',
+        TENANT_ID BIGINT NOT NULL DEFAULT  '1',
+        CREATE_DATE BIGINT NOT NULL,
+        CREATE_USER_ID BIGINT NOT NULL,
+        UPDATE_DATE BIGINT NOT NULL,
+        UPDATE_USER_ID BIGINT NOT NULL,
+        DELETE_DATE BIGINT,
+        DELETE_USER_ID BIGINT,
+        PRIMARY KEY (ID)
+    );
+    
+    COMMENT ON TABLE SYS_BIG_TEXT IS '';
+    COMMENT ON COLUMN SYS_BIG_TEXT.ID IS '主键ID';
+    COMMENT ON COLUMN SYS_BIG_TEXT.TEXT_TITLE IS '文本标题:likeParam';
+    COMMENT ON COLUMN SYS_BIG_TEXT.TEXT_CODE IS '文本编码:oneParam;listParam';
+    COMMENT ON COLUMN SYS_BIG_TEXT.TEXT_CONTENT IS '内容';
+    COMMENT ON COLUMN SYS_BIG_TEXT.STATE_ENUM IS '启用状态:[1=启用=ENABLE,;2=禁用=DISABLE]max=2';
+    COMMENT ON COLUMN SYS_BIG_TEXT.DELETE_ENUM IS '删除状态:[1=未删除=NOT_DELETED,;2=已删除=DELETED]max=2';
+    COMMENT ON COLUMN SYS_BIG_TEXT.TENANT_ID IS '所属租户';
+    COMMENT ON COLUMN SYS_BIG_TEXT.CREATE_DATE IS '创建时间';
+    COMMENT ON COLUMN SYS_BIG_TEXT.CREATE_USER_ID IS '创建人';
+    COMMENT ON COLUMN SYS_BIG_TEXT.UPDATE_DATE IS '更新时间';
+    COMMENT ON COLUMN SYS_BIG_TEXT.UPDATE_USER_ID IS '更新人';
+    COMMENT ON COLUMN SYS_BIG_TEXT.DELETE_DATE IS '删除时间';
+    COMMENT ON COLUMN SYS_BIG_TEXT.DELETE_USER_ID IS '删除人';
+    
+    
+    `);
+  }
+
+  /** Runs on rollback */
+  async down(): Promise<void> {
+    await this.client.queryObject(`
+            DROP table SYS_BIG_TEXT
+        `);
+  }
+}

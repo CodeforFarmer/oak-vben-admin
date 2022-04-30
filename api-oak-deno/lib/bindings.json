@@ -1,0 +1,1 @@
+{"name":"","littleEndian":false,"symbols":{},"typeDefs":{"Input":{"a":"i32","b":"i32"}},"tsTypes":{"Input":"export type Input = {\n    a: number;\n  b: number;\n};"}}};"}}
